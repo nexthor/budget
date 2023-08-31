@@ -6,7 +6,7 @@ namespace Budget.Api
 {
     public class BudgetDbContext : IdentityDbContext<User>
     {
-        public BudgetDbContext(DbContextOptions options) : base(options) { }
+        public BudgetDbContext(DbContextOptions<BudgetDbContext> options) : base(options) { }
 
         public DbSet<Category>? Categories { get; set; }
         public DbSet<Transaction>? Transactions { get; set; }

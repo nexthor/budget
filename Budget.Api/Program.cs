@@ -1,6 +1,7 @@
 using AspNetCoreRateLimit;
 using Budget.Api.Common;
 using Budget.Api.Extensions;
+using Budget.Api.Initializer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,10 +27,11 @@ services.Configure<ApiBehaviorOptions>(options =>
 services.AddMemoryCache();
 services.ConfigureRateLimitingOptions();
 services.AddHttpContextAccessor();
-services.AddAuthentication();
+services.AddAuthentication(BudgetConstants.Bearer);
 services.ConfigureIdentity();
 services.ConfigureJWT(configuration);
 services.AddAutoMapper(typeof(Program));
+services.AddScoped<IDbInitializer, DbInitializer>();
 
 var app = builder.Build();
 
@@ -39,6 +41,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region CreateUsers
+// Uncomment on first start if want to create new users
+//var scope = app.Services.CreateScope();
+//var serviceProvider = scope.ServiceProvider;
+//var dbInitializer = serviceProvider.GetRequiredService<IDbInitializer>();
+//dbInitializer.Initialize().GetAwaiter().GetResult();
+#endregion
 
 app.UseHttpsRedirection();
 
